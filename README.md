@@ -12,9 +12,15 @@ So beschleunigst du repetitive Konstruktionsaufgaben und bleibst flexibel, wenn 
 - Einfache Namensvergabe für Ebenen und Skizzen
 - Spare Zeit und behalte die Übersicht, wenn du schnell mehrere Ebenen oder zugehörige Skizzen erzeugen möchtest!
 
+![VersatzebenenTool Dialog](images/VersatzebenenToolDialog.png)
+
+![Erstellte Versatzebenen](images/VersatzebenenErstellt.png)
+
 # Installation:
 ## Add-In herunterladen
 Lade zunächst das komplette Add-In-Paket als Release-Archiv von GitHub herunter.
+
+![Download Archiv](images/DownloadRelease.png)
 
 ## Zip-Datei entpacken
 Entpacke das Archiv in einen beliebigen Ordner auf deinem Computer (z. B. „Dokumente“).
@@ -38,6 +44,8 @@ Entpacke das Archiv in einen beliebigen Ordner auf deinem Computer (z. B. „D
 - Wechsle in Fusion 360 zurück ins Design-Fenster.
 - Im Erstellen-Panel unter Konstruktion erscheint nun im Menu (ganz unten) der neue Eintrag "VersatzebenenTool"
 - Klick darauf, um das Add-In auszuführen
+
+![Tool im Menü](images/VersatzebenenToolMenu.png)
 
 ## Tipp:
 - Wenn du das Add-In aktualisierst (z. B. neue Version), wiederhole Schritt 4 bzw. kopiere die aktualisierten Dateien in denselben Ordner.
