@@ -14,7 +14,7 @@ def run(context):
             'cmdCreateOffsetPlanes',         # interner Bezeichner
             'Versatzebenen erstellen',       # Titel im UI
             'Erstellt eine variable Anzahl von Versatzebenen zu einer ausgewählten Ebene.',
-            'Resources/MyIcons/'              # Resource Folder Name (z.B. MyIcons/icon)
+            'Resources/MyIcons/'             # Resource Folder Name (z.B. MyIcons/)
         )
 
         # EventHandler für die Aktivierung des Befehls registrieren.
@@ -86,7 +86,7 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
             offsetValueInput = inputs.addValueInput(
                 'planeOffset',
                 'Versatz (pro Ebene)',
-                'cm',      # Einheit kann beliebig gewählt werden (mm, cm, etc.)
+                'cm',  # Einheit kann beliebig gewählt werden (mm, cm, etc.)
                 adsk.core.ValueInput.createByReal(1.0)
             )
 
@@ -95,7 +95,7 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
                 'createSketches',
                 'Leere Skizze erstellen',
                 True,   # Symboltyp: CheckBox
-                '',     # Kein spezielles Icon
+                '',
                 False   # Standardwert: False
             )
 
@@ -111,6 +111,15 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
                 'sketchName',
                 'Name der Skizze',
                 'vref'  # Standardwert
+            )
+
+            # 7) Boolean-Checkbox, ob die neuen Objekte in der Timeline gruppiert werden sollen
+            groupInHistoryInput = inputs.addBoolValueInput(
+                'groupInHistory',
+                'In Timeline gruppieren',
+                True,    # Symboltyp: CheckBox
+                '',
+                False    # Standardwert: False
             )
 
             # Reaktion auf "OK"/"Ausführen"
@@ -140,6 +149,7 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
             createSketchInput = adsk.core.BoolValueCommandInput.cast(inputs.itemById('createSketches'))
             planeNameInput = adsk.core.StringValueCommandInput.cast(inputs.itemById('planeName'))
             sketchNameInput = adsk.core.StringValueCommandInput.cast(inputs.itemById('sketchName'))
+            groupInHistoryInput = adsk.core.BoolValueCommandInput.cast(inputs.itemById('groupInHistory'))
 
             # Eingegebene Werte auslesen
             selectedEntity = selInput.selection(0).entity
@@ -150,6 +160,9 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
             # Falls Eingaben leer sind, Standardwerte verwenden.
             planeName = planeNameInput.value.strip() or 'vref'
             sketchName = sketchNameInput.value.strip() or 'vref'
+
+            # Soll in der Timeline gruppiert werden?
+            shouldGroup = groupInHistoryInput.value
 
             rootComp = design.rootComponent
             constructions = rootComp.constructionPlanes
@@ -164,6 +177,10 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
             if not basePlane:
                 ui.messageBox("Auswahl ist keine gültige Ebene oder planare Fläche.")
                 return
+
+            # Vor dem Erstellen den Startpunkt für den Timeline-Eintrag merken
+            timeline = design.timeline
+            startIndex = timeline.count
 
             # Neue Versatzebenen erzeugen
             # Die erste Ebene liegt an der Position der ausgewählten Ebene (Versatz = 0)
@@ -182,8 +199,15 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
                     newSketch = rootComp.sketches.add(offsetPlane)
                     newSketch.name = f"{sketchName} {i+1}"
 
+            # Timeline-Gruppierung vornehmen (wenn gewünscht)
+            endIndex = timeline.count - 1  # Index nach unseren letzten Erstellungen
+            if shouldGroup and endIndex >= startIndex:
+                newGroup = timeline.timelineGroups.add(startIndex, endIndex)
+                newGroup.name = f"{planeName} - Gruppe"
+
             ui.messageBox(f"{numPlanes} Versatzebenen wurden erfolgreich erstellt.\n"
-                          + ("Skizzen wurden ebenfalls erstellt." if createSketches else ""))
+                          + ("Skizzen wurden ebenfalls erstellt.\n" if createSketches else "")
+                          + ("Timeline-Einträge wurden gruppiert." if shouldGroup else ""))
 
         except:
             ui = adsk.core.Application.get().userInterface

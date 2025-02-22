@@ -4,9 +4,9 @@
 	"id":	"",
 	"author":	"Rene Triebenstein",
 	"description":	{
-		"":	"Versatzebenen erstellen"
+		"":	"Versatzebenen, Skizzen erstellen und gruppieren"
 	},
-	"version":	"1.0",
+	"version":	"1.1",
 	"runOnStartup":	false,
 	"supportedOS":	"windows|mac",
 	"editEnabled":	true,
