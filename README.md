@@ -17,30 +17,43 @@ So beschleunigst du repetitive Konstruktionsaufgaben und bleibst flexibel, wenn 
 ![Erstellte Versatzebenen](images/VersatzebenenErstellt.png)
 
 # Installation:
-## Add-In herunterladen
-Lade zunächst das komplette Add-In-Paket als Release-Archiv von GitHub herunter.
+## Windows: Installation über Setup aus den GitHub-Releases
+Für Windows ist der einfachste Weg die Setup-Datei aus den GitHub-Releases.
+
+1. Öffne die Release-Seite des Projekts auf GitHub.
+2. Lade im Abschnitt `Assets` die Datei `VersatzebenenTool_Setup_<Version>.exe` herunter.
+3. Starte die heruntergeladene Setup-Datei.
+4. Folge dem Inno-Setup-Assistenten. Das Add-In wird automatisch in das Fusion-360-Add-In-Verzeichnis unter `%AppData%\\Autodesk\\Autodesk Fusion 360\\API\\AddIns\\VersatzebenenTool` installiert.
+5. Starte Fusion 360 neu, falls Fusion 360 während der Installation bereits geöffnet war.
+6. Öffne in Fusion 360 `TOOLS` → `Add-Ins` beziehungsweise `Scripts and Add-Ins`.
+7. Wähle im Reiter `Add-Ins` das `VersatzebenenTool` aus und klicke auf `Run` oder `Activate`.
+8. Optional kannst du `Run on Startup` aktivieren, damit das Add-In bei jedem Start automatisch geladen wird.
+
+## Alternative: Manuelle Installation per ZIP
+### Add-In herunterladen
+Lade das komplette Add-In-Paket als Release-Archiv von GitHub herunter.
 
 ![Download Archiv](images/DownloadRelease.png)
 
-## Zip-Datei entpacken
+### Zip-Datei entpacken
 Entpacke das Archiv in einen beliebigen Ordner auf deinem Computer (z. B. „Dokumente“).
 
-## Fusion 360 starten & Add-In-Verwaltung aufrufen
+### Fusion 360 starten & Add-In-Verwaltung aufrufen
 - Öffne Fusion 360.
 - Wähle in der oberen Menüleiste „TOOLS“ → „Add-Ins“ (bzw. „Scripts and Add-Ins“).
 
-## Add-In importieren
+### Add-In importieren
 - Klicke im neu geöffneten Fenster auf den Reiter „Add-Ins“ (nicht „Scripts“).
 - Klicke unten rechts auf „+“ (oder „Add“).
 - Navigiere in den Ordner, den du zuvor entpackt hast, und wähle dort den Add-In-Ordner (mit manifest.json).
 - Bestätige die Auswahl.
 
-## Add-In aktivieren
+### Add-In aktivieren
 - Markiere nun in der Liste dein neues Add-In.
 - Klicke auf „Run“ oder „Activate“, damit Fusion 360 dein Add-In lädt.
 - Optional kannst du das Häkchen bei „Run on Startup“ setzen, damit sich das Add-In beim nächsten Fusion-Start automatisch lädt.
 
-## Einsatz des Add-Ins prüfen
+### Einsatz des Add-Ins prüfen
 - Wechsle in Fusion 360 zurück ins Design-Fenster.
 - Im Erstellen-Panel unter Konstruktion erscheint nun im Menu (ganz unten) der neue Eintrag "VersatzebenenTool"
 - Klick darauf, um das Add-In auszuführen
@@ -48,6 +61,7 @@ Entpacke das Archiv in einen beliebigen Ordner auf deinem Computer (z. B. „D
 ![Tool im Menü](images/VersatzebenenToolMenu.png)
 
 ## Tipp:
+- Unter Windows kannst du für Neuinstallationen und Updates auch einfach die aktuelle `VersatzebenenTool_Setup_<Version>.exe` aus den GitHub-Releases ausführen.
 - Wenn du das Add-In aktualisierst (z. B. neue Version), wiederhole Schritt 4 bzw. kopiere die aktualisierten Dateien in denselben Ordner.
 - Unter Windows liegt das Standard-Add-Ins-Verzeichnis meist in
 C:\\Users\\<Benutzername>\\AppData\\Roaming\\Autodesk\\Fusion 360\\API\\AddIns.
