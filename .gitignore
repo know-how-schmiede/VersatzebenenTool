@@ -1,0 +1,41 @@
+# Build and installer artifacts
+dist/
+build/
+installer/Output/
+*.exe
+*.tmp
+*.temp
+*.bak
+*.iss.bak
+*.~*
+
+# Python caches and tooling output
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.hypothesis/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+pip-wheel-metadata/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+pythonenv/
+pyvenv.cfg
+
+# Editors and OS files
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

@@ -1,5 +1,14 @@
 import adsk.core, adsk.fusion, adsk.cam, traceback
 
+try:
+    from .version import VERSION
+except ImportError:
+    from version import VERSION
+
+
+COMMAND_ID = 'cmdCreateOffsetPlanes'
+COMMAND_NAME = f'Versatzebenen erstellen (v{VERSION})'
+
 # Globalvariablen, um Referenzen auf EventHandler zu behalten.
 handlers = []
 
@@ -11,8 +20,8 @@ def run(context):
 
         # Eine neue Befehl-Definition anlegen.
         cmdDef = ui.commandDefinitions.addButtonDefinition(
-            'cmdCreateOffsetPlanes',         # interner Bezeichner
-            'Versatzebenen erstellen',       # Titel im UI
+            COMMAND_ID,
+            COMMAND_NAME,
             'Erstellt eine variable Anzahl von Versatzebenen zu einer ausgewählten Ebene.',
             'Resources/MyIcons/'             # Resource Folder Name (z.B. MyIcons/)
         )
@@ -39,13 +48,13 @@ def stop(context):
         ui  = app.userInterface
 
         # Befehl-Definition entfernen, wenn vorhanden.
-        cmdDef = ui.commandDefinitions.itemById('cmdCreateOffsetPlanes')
+        cmdDef = ui.commandDefinitions.itemById(COMMAND_ID)
         if cmdDef:
             cmdDef.deleteMe()
 
         # CommandControl entfernen, wenn vorhanden.
         createPanel = ui.allToolbarPanels.itemById('SolidCreatePanel')
-        ctrl = createPanel.controls.itemById('cmdCreateOffsetPlanes')
+        ctrl = createPanel.controls.itemById(COMMAND_ID)
         if ctrl:
             ctrl.deleteMe()
 
