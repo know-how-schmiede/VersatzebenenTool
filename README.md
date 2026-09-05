@@ -1,7 +1,9 @@
-﻿# VersatzebenenTool
+![VersatzebenenTool](fusion_addin/VersatzebenenTool/Resources/banner.png)
+
+# VersatzebenenTool
 
 <!-- version:start -->
-**Current version: 1.2.1**
+**Current version: 1.2.2**
 <!-- version:end -->
 
 [Deutsche README](README.de.md) · [Version history](doku/version.md)
@@ -10,7 +12,7 @@ A Python add-in for Autodesk Fusion to create offset construction planes, option
 
 ## Current project status
 
-- Create 1–50 planes in the root component from a construction plane.
+- Create 1–50 planes in the root component from a construction plane or planar face.
 - Set uniform spacing for the series. The first plane has zero offset: five planes at 1 cm spacing are placed at 0, 1, 2, 3 and 4 cm.
 - Optionally create an empty sketch on every plane.
 - Set plane and sketch base names with automatic numbering; the default is `vref`.
@@ -18,7 +20,7 @@ A Python add-in for Autodesk Fusion to create offset construction planes, option
 - Display the current version in the command title.
 - Use English, German, French, Spanish or Polish for the active command's labels, prompts, messages and generated group names.
 
-Individual distances per plane are not implemented. Select a construction plane: the existing selection filter also offers planar faces, but execution currently rejects them. Geometry creation and native UI behavior require testing inside Fusion.
+Individual distances per plane are not implemented. The dialog uses document length units and validates the selection and numeric inputs. Timeline grouping is disabled in direct modeling mode. Geometry creation and native UI behavior require testing inside Fusion.
 
 ![Command dialog (earlier German UI)](images/VersatzebenenToolDialog.png)
 ![Created planes](images/VersatzebenenErstellt.png)
@@ -41,7 +43,7 @@ Individual distances per plane are not implemented. Select a construction plane:
 
 ## Usage and language
 
-The dialog opens when the add-in starts. Reopen it from the **Create** panel in the Design workspace. Select a construction plane, set count and spacing, choose names and optional sketches/grouping, then confirm.
+The dialog shows the shared project banner and opens when the add-in starts with an active design. Reopen it from the **Create** panel in the Design workspace. Select a construction plane or planar face, set count and spacing, choose names and optional sketches/grouping, then confirm.
 
 The add-in reads Fusion's language at startup using [GeneralPreferences.userLanguage](https://help.autodesk.com/cloudhelp/ENU/Fusion-360-API/files/GeneralPreferences_userLanguage.htm). Change the user language in Fusion's general preferences and restart Fusion. Unsupported languages or unavailable preferences fall back to English. User-entered names remain unchanged.
 
@@ -50,6 +52,8 @@ Translations are centralized in `fusion_addin/VersatzebenenTool/localization.py`
 ![Command menu (earlier UI)](images/VersatzebenenToolMenu.png)
 
 ## Development and version maintenance
+
+Run `python -B -m unittest discover -s tests -v` for regression tests with Fusion API doubles. The [banner notes](doku/banner.md) document the shared asset and its generation prompt.
 
 - `fusion_addin/VersatzebenenTool/`: installable add-in.
 - `installer/VersatzebenenTool_installer.iss`: Inno Setup installer definition; compiled output goes to `dist/`.

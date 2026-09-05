@@ -1,10 +1,20 @@
-﻿# Version history / Versionshistorie
+# Version history / Versionshistorie
 
 <!-- version:start -->
-**Current version / Aktuelle Version: 1.2.1**
+**Current version / Aktuelle Version: 1.2.2**
 <!-- version:end -->
 
 [English README](../README.md) · [Deutsche README](../README.de.md)
+
+## 1.2.2
+
+- Added a shared CAD banner at the top of both READMEs and in the Fusion command dialog.
+- Fixed planar-face references; removed the invalid construction-plane cast.
+- Added input validation, design checks and document length units.
+- Disabled timeline grouping without design history and use the timeline marker to group newly inserted features.
+- Reused startup cleanup and release dialog event handlers on destruction.
+- Report execution failures through Fusion command errors.
+- Added regression coverage for geometry options, validation, lifecycle and banner integration.
 
 ## 1.2.1
 

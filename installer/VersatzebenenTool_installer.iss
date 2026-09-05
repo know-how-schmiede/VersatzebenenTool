@@ -1,5 +1,5 @@
 #define MyAppName "VersatzebenenTool"
-#define MyAppVersion "1.2.1"
+#define MyAppVersion "1.2.2"
 #define MyAppPublisher "Rene Triebenstein"
 #define MyAppSourceDir "..\fusion_addin\VersatzebenenTool"
 

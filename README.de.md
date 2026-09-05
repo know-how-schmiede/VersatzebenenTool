@@ -1,7 +1,9 @@
-﻿# VersatzebenenTool
+![VersatzebenenTool](fusion_addin/VersatzebenenTool/Resources/banner.png)
+
+# VersatzebenenTool
 
 <!-- version:start -->
-**Aktuelle Version: 1.2.1**
+**Aktuelle Version: 1.2.2**
 <!-- version:end -->
 
 [English README](README.md) · [Versionshistorie](doku/version.md)
@@ -10,7 +12,7 @@ Ein Python-Add-in für Autodesk Fusion zum Erstellen von Versatzebenen, optional
 
 ## Aktueller Projektstand
 
-- 1–50 Ebenen ausgehend von einer Konstruktionsebene in der Stammkomponente erstellen.
+- 1–50 Ebenen ausgehend von einer Konstruktionsebene oder planaren Fläche in der Stammkomponente erstellen.
 - Gleichmäßigen Abstand für die Serie festlegen. Die erste Ebene hat Versatz 0: Fünf Ebenen mit 1 cm Abstand liegen bei 0, 1, 2, 3 und 4 cm.
 - Optional eine leere Skizze auf jeder Ebene erstellen.
 - Basisnamen für Ebenen und Skizzen mit automatischer Nummerierung vergeben; der Standard ist `vref`.
@@ -18,7 +20,7 @@ Ein Python-Add-in für Autodesk Fusion zum Erstellen von Versatzebenen, optional
 - Aktuelle Version im Befehlstitel anzeigen.
 - Beschriftungen, Auswahlhinweise, Meldungen und erzeugte Gruppennamen des aktiven Befehls in Englisch, Deutsch, Französisch, Spanisch und Polnisch anzeigen.
 
-Individuelle Abstände je Ebene sind nicht implementiert. Bitte eine Konstruktionsebene auswählen: Der vorhandene Auswahlfilter bietet auch planare Flächen an, die Ausführung weist diese jedoch derzeit zurück. Geometrieerstellung und native Oberfläche müssen direkt in Fusion getestet werden.
+Individuelle Abstände je Ebene sind nicht implementiert. Der Dialog verwendet die Längeneinheiten der Konstruktion und prüft Auswahl sowie Zahlenwerte. Im direkten Modellierungsmodus ist die Timeline-Gruppierung deaktiviert. Geometrieerstellung und native Oberfläche müssen direkt in Fusion getestet werden.
 
 ![Befehlsdialog (frühere deutsche Oberfläche)](images/VersatzebenenToolDialog.png)
 ![Erstellte Ebenen](images/VersatzebenenErstellt.png)
@@ -41,7 +43,7 @@ Individuelle Abstände je Ebene sind nicht implementiert. Bitte eine Konstruktio
 
 ## Bedienung und Sprache
 
-Beim Start des Add-ins öffnet sich der Dialog. Er lässt sich anschließend im Arbeitsbereich Konstruktion über das Panel **Erstellen** erneut öffnen. Eine Konstruktionsebene auswählen, Anzahl und Abstand einstellen, Namen und bei Bedarf Skizzen/Gruppierung festlegen und bestätigen.
+Beim Start des Add-ins mit aktiver Konstruktion öffnet sich der Dialog mit dem gemeinsamen Projektbanner. Er lässt sich anschließend im Arbeitsbereich Konstruktion über das Panel **Erstellen** erneut öffnen. Eine Konstruktionsebene oder planare Fläche auswählen, Anzahl und Abstand einstellen, Namen und bei Bedarf Skizzen/Gruppierung festlegen und bestätigen.
 
 Das Add-in liest beim Start die Fusion-Sprache über [GeneralPreferences.userLanguage](https://help.autodesk.com/cloudhelp/ENU/Fusion-360-API/files/GeneralPreferences_userLanguage.htm). Zum Wechseln die Benutzersprache in den allgemeinen Fusion-Voreinstellungen ändern und Fusion neu starten. Bei nicht unterstützten Sprachen oder nicht verfügbaren Einstellungen wird Englisch verwendet. Selbst eingegebene Namen bleiben unverändert.
 
@@ -50,6 +52,8 @@ Die Übersetzungen liegen zentral in `fusion_addin/VersatzebenenTool/localizatio
 ![Befehl im Menü (frühere Oberfläche)](images/VersatzebenenToolMenu.png)
 
 ## Entwicklung und Versionspflege
+
+Mit `python -B -m unittest discover -s tests -v` werden Regressionstests mit simulierten Fusion-API-Objekten ausgeführt. Die [Banner-Notizen](doku/banner.md) dokumentieren die gemeinsame Bilddatei und den Erzeugungsprompt.
 
 - `fusion_addin/VersatzebenenTool/`: installierbares Add-in.
 - `installer/VersatzebenenTool_installer.iss`: Inno-Setup-Installerdefinition; kompilierte Ausgabe unter `dist/`.
