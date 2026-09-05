@@ -3,7 +3,7 @@
 # VersatzebenenTool
 
 <!-- version:start -->
-**Current version: 1.3.0**
+**Current version: 1.3.1**
 <!-- version:end -->
 
 [Deutsche README](README.de.md) · [Version history](doku/version.md)
@@ -33,7 +33,7 @@ Individual distances per plane are not implemented. The dialog uses document len
 
 1. Open the [GitHub releases](https://github.com/know-how-schmiede/VersatzebenenTool/releases).
 2. If available for the desired release, download and run `VersatzebenenTool_Setup_<Version>.exe`.
-3. The installer uses `%AppData%\Autodesk\Autodesk Fusion 360\API\AddIns\VersatzebenenTool`.
+3. The installer defaults to `%AppData%\Autodesk\Autodesk Fusion 360\API\AddIns\VersatzebenenTool`, or reuses a previous installation folder. It does not detect the path registered in Fusion. The folder selection page lets you review and change the destination; select the `VersatzebenenTool` folder itself. The final page shows the actual installation path and asks you to compare it with Fusion's registered add-in path. Register that folder using **Add (+)** if necessary. Setup supports English and German.
 4. In Fusion's **Scripts and Add-Ins** dialog, select **VersatzebenenTool** under **Add-Ins** and choose **Run**. Optionally enable **Run on Startup**.
 
 ### Manual installation (Windows and macOS)

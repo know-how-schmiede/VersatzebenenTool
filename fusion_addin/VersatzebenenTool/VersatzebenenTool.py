@@ -141,7 +141,8 @@ def _create_planes(design, reference, count, spacing, plane_name, sketch_name,
     root = design.rootComponent
     planes = root.constructionPlanes
     timeline = design.timeline if group and _has_history(design) else None
-    start_index = timeline.markerPosition if timeline else None
+    # An empty Fusion timeline is falsy, but still has a valid marker at 0.
+    start_index = timeline.markerPosition if timeline is not None else None
     created_planes = []
 
     for index in range(count):
@@ -159,7 +160,7 @@ def _create_planes(design, reference, count, spacing, plane_name, sketch_name,
             sketch.name = f'{sketch_name} {index + 1}'
 
     grouped = False
-    if timeline:
+    if timeline is not None:
         end_index = timeline.markerPosition - 1
         if end_index >= start_index:
             timeline_group = timeline.timelineGroups.add(start_index, end_index)

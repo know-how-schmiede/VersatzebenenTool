@@ -31,6 +31,12 @@ class BRepFace(Castable):
         self.geometry = geometry
 
 
+class Timeline(NS):
+    """Fusion collections are false when empty, even though they exist."""
+    def __len__(self):
+        return self.count
+
+
 class CommandTests(unittest.TestCase):
     def setUp(self):
         adsk = ModuleType('adsk')
@@ -62,13 +68,15 @@ class CommandTests(unittest.TestCase):
         self.command = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(self.command)
 
-    def design(self, history=True):
-        timeline = NS(markerPosition=3, count=20, timelineGroups=MagicMock())
+    def design(self, history=True, empty=False):
+        timeline = Timeline(markerPosition=0 if empty else 3,
+                            count=0 if empty else 20, timelineGroups=MagicMock())
         planes, sketches = MagicMock(), MagicMock()
         self.created_planes = []
 
         def add_plane(_):
             timeline.markerPosition += 1
+            timeline.count += 1
             plane = NS(displayBounds=NS(minPoint=NS(x=2, y=3), maxPoint=NS(x=4, y=5)),
                        isLightBulbOn=True)
             self.created_planes.append(plane)
@@ -76,6 +84,7 @@ class CommandTests(unittest.TestCase):
 
         def add_sketch(_):
             timeline.markerPosition += 1
+            timeline.count += 1
             for plane in self.created_planes:
                 plane.isLightBulbOn = False
             return NS()
@@ -129,6 +138,17 @@ class CommandTests(unittest.TestCase):
         self.assertFalse(self.command._create_planes(
             design, ConstructionPlane(), 1, 0, 'P', 'S', False, True))
         design.rootComponent.sketches.add.assert_not_called()
+
+    def test_grouping_from_empty_timeline_starts_at_zero(self):
+        for sketches in (False, True):
+            with self.subTest(sketches=sketches):
+                design, timeline = self.design(empty=True)
+                self.assertFalse(timeline)
+                grouped = self.command._create_planes(
+                    design, ConstructionPlane(), 5, 1, 'vref', 'vref', sketches, True)
+                self.assertTrue(grouped)
+                timeline.timelineGroups.add.assert_called_once_with(0, 9 if sketches else 4)
+                self.assertTrue(all(p.isLightBulbOn for p in self.created_planes))
 
     def test_failed_plane_definition_stops_creation(self):
         design, _ = self.design()

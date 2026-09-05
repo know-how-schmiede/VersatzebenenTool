@@ -1,10 +1,16 @@
 # Version history / Versionshistorie
 
 <!-- version:start -->
-**Current version / Aktuelle Version: 1.3.0**
+**Current version / Aktuelle Version: 1.3.1**
 <!-- version:end -->
 
 [English README](../README.md) · [Deutsche README](../README.de.md)
+
+## 1.3.1
+
+- Fixed timeline grouping in a new design with an empty timeline: explicitly check for a missing timeline rather than treating an empty collection as missing. Added regression coverage with and without sketches.
+
+- Enabled installer folder selection and added English/German guidance to compare the destination with Fusion's registered add-in path. The final page displays the actual installation directory; automatic Fusion path detection is not performed.
 
 ## 1.3.0
 

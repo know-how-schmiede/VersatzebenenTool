@@ -3,7 +3,7 @@
 # VersatzebenenTool
 
 <!-- version:start -->
-**Aktuelle Version: 1.3.0**
+**Aktuelle Version: 1.3.1**
 <!-- version:end -->
 
 [English README](README.md) · [Versionshistorie](doku/version.md)
@@ -33,7 +33,7 @@ Individuelle Abstände je Ebene sind nicht implementiert. Der Dialog verwendet d
 
 1. Die [GitHub-Releases](https://github.com/know-how-schmiede/VersatzebenenTool/releases) öffnen.
 2. Falls für die gewünschte Version verfügbar, `VersatzebenenTool_Setup_<Version>.exe` herunterladen und ausführen.
-3. Der Installer verwendet `%AppData%\Autodesk\Autodesk Fusion 360\API\AddIns\VersatzebenenTool`.
+3. Der Installer schlägt `%AppData%\Autodesk\Autodesk Fusion 360\API\AddIns\VersatzebenenTool` vor oder übernimmt den Ordner einer früheren Installation. Er erkennt den in Fusion registrierten Pfad nicht automatisch. Die Ordnerauswahl erlaubt das Prüfen und Ändern des Ziels; wählen Sie den Ordner `VersatzebenenTool` selbst. Die Abschlussseite zeigt den tatsächlichen Installationspfad mit dem Hinweis, ihn mit dem in Fusion hinterlegten Add-in-Pfad abzugleichen. Registrieren Sie diesen Ordner bei Bedarf über **Hinzufügen (+)**. Das Setup unterstützt Deutsch und Englisch.
 4. In Fusion unter **Skripte und Zusatzmodule → Zusatzmodule** das **VersatzebenenTool** auswählen und starten. Optional den automatischen Start aktivieren.
 
 ### Manuelle Installation (Windows und macOS)
