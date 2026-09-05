@@ -1,0 +1,14 @@
+{
+	"autodeskProduct":	"Fusion",
+	"type":	"addin",
+	"id":	"",
+	"author":	"Rene Triebenstein",
+	"description":	{
+		"":	"Versatzebenen, Skizzen erstellen und gruppieren"
+	},
+	"version":	"1.2.1",
+	"runOnStartup":	false,
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true,
+	"iconFilename":	"AddInIcon.svg"
+}

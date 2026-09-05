@@ -1,71 +1,61 @@
-# VersatzebenenTool
-Fusion 360 App - Versatzebenen automatisch erstellen
+﻿# VersatzebenenTool
 
-Erstelle in Sekundenschnelle eine beliebige Anzahl von Versatzebenen im Fusion 360-Design.
-Unser Add-In ermöglicht dir, Abstände, Namen und sogar optionale Skizzen pro Ebene individuell festzulegen – alles in einem einfachen Dialog.
-So beschleunigst du repetitive Konstruktionsaufgaben und bleibst flexibel, wenn sich Änderungen ergeben.
+<!-- version:start -->
+**Current version: 1.2.1**
+<!-- version:end -->
 
-# Highlights:
-- Frei wählbare Anzahl von Versatzebenen
-- Individuelle Abstände für jeden Schritt
-- Automatische Skizzenerzeugung (optional)
-- Einfache Namensvergabe für Ebenen und Skizzen
-- Spare Zeit und behalte die Übersicht, wenn du schnell mehrere Ebenen oder zugehörige Skizzen erzeugen möchtest!
+[Deutsche README](README.de.md) · [Version history](doku/version.md)
 
-![VersatzebenenTool Dialog](images/VersatzebenenToolDialog.png)
+A Python add-in for Autodesk Fusion to create offset construction planes, optional sketches and timeline groups. Supports Windows and macOS; an Inno Setup installer definition is included for Windows.
 
-![Erstellte Versatzebenen](images/VersatzebenenErstellt.png)
+## Current project status
 
-# Installation:
-## Windows: Installation über Setup aus den GitHub-Releases
-Für Windows ist der einfachste Weg die Setup-Datei aus den GitHub-Releases.
+- Create 1–50 planes in the root component from a construction plane.
+- Set uniform spacing for the series. The first plane has zero offset: five planes at 1 cm spacing are placed at 0, 1, 2, 3 and 4 cm.
+- Optionally create an empty sketch on every plane.
+- Set plane and sketch base names with automatic numbering; the default is `vref`.
+- Optionally group the created objects in the timeline (requires design history).
+- Display the current version in the command title.
+- Use English, German, French, Spanish or Polish for the active command's labels, prompts, messages and generated group names.
 
-1. Öffne die Release-Seite des Projekts auf GitHub.
-2. Lade im Abschnitt `Assets` die Datei `VersatzebenenTool_Setup_<Version>.exe` herunter.
-3. Starte die heruntergeladene Setup-Datei.
-4. Folge dem Inno-Setup-Assistenten. Das Add-In wird automatisch in das Fusion-360-Add-In-Verzeichnis unter `%AppData%\\Autodesk\\Autodesk Fusion 360\\API\\AddIns\\VersatzebenenTool` installiert.
-5. Starte Fusion 360 neu, falls Fusion 360 während der Installation bereits geöffnet war.
-6. Öffne in Fusion 360 `TOOLS` → `Add-Ins` beziehungsweise `Scripts and Add-Ins`.
-7. Wähle im Reiter `Add-Ins` das `VersatzebenenTool` aus und klicke auf `Run` oder `Activate`.
-8. Optional kannst du `Run on Startup` aktivieren, damit das Add-In bei jedem Start automatisch geladen wird.
+Individual distances per plane are not implemented. Select a construction plane: the existing selection filter also offers planar faces, but execution currently rejects them. Geometry creation and native UI behavior require testing inside Fusion.
 
-## Alternative: Manuelle Installation per ZIP
-### Add-In herunterladen
-Lade das komplette Add-In-Paket als Release-Archiv von GitHub herunter.
+![Command dialog (earlier German UI)](images/VersatzebenenToolDialog.png)
+![Created planes](images/VersatzebenenErstellt.png)
 
-![Download Archiv](images/DownloadRelease.png)
+## Installation
 
-### Zip-Datei entpacken
-Entpacke das Archiv in einen beliebigen Ordner auf deinem Computer (z. B. „Dokumente“).
+### Windows installer
 
-### Fusion 360 starten & Add-In-Verwaltung aufrufen
-- Öffne Fusion 360.
-- Wähle in der oberen Menüleiste „TOOLS“ → „Add-Ins“ (bzw. „Scripts and Add-Ins“).
+1. Open the [GitHub releases](https://github.com/know-how-schmiede/VersatzebenenTool/releases).
+2. If available for the desired release, download and run `VersatzebenenTool_Setup_<Version>.exe`.
+3. The installer uses `%AppData%\Autodesk\Autodesk Fusion 360\API\AddIns\VersatzebenenTool`.
+4. In Fusion's **Scripts and Add-Ins** dialog, select **VersatzebenenTool** under **Add-Ins** and choose **Run**. Optionally enable **Run on Startup**.
 
-### Add-In importieren
-- Klicke im neu geöffneten Fenster auf den Reiter „Add-Ins“ (nicht „Scripts“).
-- Klicke unten rechts auf „+“ (oder „Add“).
-- Navigiere in den Ordner, den du zuvor entpackt hast, und wähle dort den Add-In-Ordner (mit manifest.json).
-- Bestätige die Auswahl.
+### Manual installation (Windows and macOS)
 
-### Add-In aktivieren
-- Markiere nun in der Liste dein neues Add-In.
-- Klicke auf „Run“ oder „Activate“, damit Fusion 360 dein Add-In lädt.
-- Optional kannst du das Häkchen bei „Run on Startup“ setzen, damit sich das Add-In beim nächsten Fusion-Start automatisch lädt.
+1. Download and extract a release archive or this repository.
+2. Keep the complete `fusion_addin/VersatzebenenTool` folder together. It contains `VersatzebenenTool.py` and `VersatzebenenTool.manifest`.
+3. Open **Scripts and Add-Ins → Add-Ins**, use **+ / Add** and select that folder, not the repository root. Run the add-in.
+4. For updates, stop the add-in, replace its files and restart it.
 
-### Einsatz des Add-Ins prüfen
-- Wechsle in Fusion 360 zurück ins Design-Fenster.
-- Im Erstellen-Panel unter Konstruktion erscheint nun im Menu (ganz unten) der neue Eintrag "VersatzebenenTool"
-- Klick darauf, um das Add-In auszuführen
+## Usage and language
 
-![Tool im Menü](images/VersatzebenenToolMenu.png)
+The dialog opens when the add-in starts. Reopen it from the **Create** panel in the Design workspace. Select a construction plane, set count and spacing, choose names and optional sketches/grouping, then confirm.
 
-## Tipp:
-- Unter Windows kannst du für Neuinstallationen und Updates auch einfach die aktuelle `VersatzebenenTool_Setup_<Version>.exe` aus den GitHub-Releases ausführen.
-- Wenn du das Add-In aktualisierst (z. B. neue Version), wiederhole Schritt 4 bzw. kopiere die aktualisierten Dateien in denselben Ordner.
-- Unter Windows liegt das Standard-Add-Ins-Verzeichnis meist in
-C:\\Users\\<Benutzername>\\AppData\\Roaming\\Autodesk\\Fusion 360\\API\\AddIns.
-- Unter macOS findest du es unter
-~/Library/Application Support/Autodesk/Autodesk Fusion 360/API/AddIns.
+The add-in reads Fusion's language at startup using [GeneralPreferences.userLanguage](https://help.autodesk.com/cloudhelp/ENU/Fusion-360-API/files/GeneralPreferences_userLanguage.htm). Change the user language in Fusion's general preferences and restart Fusion. Unsupported languages or unavailable preferences fall back to English. User-entered names remain unchanged.
 
-Viel Erfolg bei der Installation!
+Translations are centralized in `fusion_addin/VersatzebenenTool/localization.py`. Unused sample commands under `commands/` are template code, outside the active translated UI.
+
+![Command menu (earlier UI)](images/VersatzebenenToolMenu.png)
+
+## Development and version maintenance
+
+- `fusion_addin/VersatzebenenTool/`: installable add-in.
+- `installer/VersatzebenenTool_installer.iss`: Inno Setup installer definition; compiled output goes to `dist/`.
+- `doku/version.md`: release history.
+- `tools/sync_version.py`: version synchronization.
+
+For a new release, edit `VERSION` in `fusion_addin/VersatzebenenTool/version.py`, run `python tools/sync_version.py`, and add release notes to `doku/version.md`. Use `python tools/sync_version.py --check` for read-only consistency validation. Historical release entries keep their original version numbers. Compile the installer after synchronization.
+
+License: [GPL-3.0](LICENSE).
