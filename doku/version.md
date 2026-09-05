@@ -8,6 +8,8 @@
 
 ## 1.2.2
 
+- Fixed startup import collisions with other Fusion add-ins by loading version and localization directly from this add-in's directory, without shared module-cache entries.
+
 - Added a shared CAD banner at the top of both READMEs and in the Fusion command dialog.
 - Fixed planar-face references; removed the invalid construction-plane cast.
 - Added input validation, design checks and document length units.

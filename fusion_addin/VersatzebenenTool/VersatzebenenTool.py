@@ -1,18 +1,34 @@
 """Fusion command for creating evenly spaced planes and optional sketches."""
 
 import math
+import hashlib
+import importlib.util
 from pathlib import Path
 import traceback
 
 import adsk.core
 import adsk.fusion
 
-if __package__:
-    from .version import VERSION
-    from .localization import initialize, tr
-else:
-    from version import VERSION
-    from localization import initialize, tr
+def _load_local_module(name):
+    """Load our own file even when Fusion shares imports between add-ins.
+
+    Use an isolated module name and reload on each add-in start so updates do
+    not reuse cached versions or translations from a previous run.
+    """
+    directory = Path(__file__).resolve().parent
+    namespace = hashlib.sha256(str(directory).encode('utf-8')).hexdigest()[:16]
+    spec = importlib.util.spec_from_file_location(
+        f'_versatzebenentool_{namespace}_{name}', directory / f'{name}.py')
+    module = importlib.util.module_from_spec(spec)
+    # These self-contained modules need no global sys.modules registration.
+    spec.loader.exec_module(module)
+    return module
+
+
+VERSION = _load_local_module('version').VERSION
+_localization = _load_local_module('localization')
+initialize = _localization.initialize
+tr = _localization.tr
 
 COMMAND_ID = 'cmdCreateOffsetPlanes'
 PANEL_ID = 'SolidCreatePanel'

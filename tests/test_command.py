@@ -81,6 +81,27 @@ class CommandTests(unittest.TestCase):
             design.timeline = timeline
         return design, timeline
 
+    def test_standalone_load_ignores_other_addins_modules(self):
+        foreign_version = ModuleType('version')  # InsertWizard has no VERSION.
+        foreign_localization = ModuleType('localization')
+        with patch.dict(sys.modules, {'version': foreign_version,
+                                      'localization': foreign_localization}):
+            spec = importlib.util.spec_from_file_location(
+                'VersatzebenenTool', ADDIN / 'VersatzebenenTool.py')
+            standalone = importlib.util.module_from_spec(spec)
+            self.assertFalse(standalone.__package__)
+            spec.loader.exec_module(standalone)
+            self.assertEqual(standalone.VERSION, self.command.VERSION)
+            self.assertEqual(standalone.tr('command'), 'Create offset planes')
+            self.assertIs(sys.modules['version'], foreign_version)
+            self.assertIs(sys.modules['localization'], foreign_localization)
+
+    def test_reload_does_not_reuse_previous_localization_state(self):
+        self.command._localization._language = 'de'
+        fresh = self.command._load_local_module('localization')
+        self.assertEqual(fresh.tr('command'), 'Create offset planes')
+        self.assertIsNot(fresh, self.command._localization)
+
     def test_planar_faces_are_passed_to_offset_without_casting_to_plane(self):
         design, timeline = self.design()
         reference = BRepFace(Plane())
