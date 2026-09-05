@@ -109,20 +109,40 @@ def _valid_inputs(inputs):
     selection = inputs.itemById('planeSelection')
     offset = inputs.itemById('planeOffset')
     count = inputs.itemById('numPlanes').value
+    size = inputs.itemById('planeDisplaySize')
     return (selection.selectionCount == 1
             and _is_planar(selection.selection(0).entity)
             and MIN_PLANES <= count <= MAX_PLANES
             and offset.isValidExpression
-            and math.isfinite(offset.value))
+            and math.isfinite(offset.value)
+            and size.isValidExpression
+            and math.isfinite(size.value) and size.value > 0)
+
+
+def _size_plane(plane, minimum_size):
+    """Enlarge the display rectangle, preserving its center and existing size.
+
+    Dimensions are in Fusion internal length units (cm). Name length is a
+    heuristic: actual label visibility also depends on zoom and Fusion settings.
+    """
+    bounds = plane.displayBounds
+    low, high = bounds.minPoint, bounds.maxPoint
+    center_x, center_y = (low.x + high.x) / 2, (low.y + high.y) / 2
+    width = max(high.x - low.x, minimum_size, len(plane.name) * minimum_size / 20)
+    height = max(high.y - low.y, minimum_size)
+    plane.displayBounds = adsk.core.BoundingBox2D.create(
+        adsk.core.Point2D.create(center_x - width / 2, center_y - height / 2),
+        adsk.core.Point2D.create(center_x + width / 2, center_y + height / 2))
 
 
 def _create_planes(design, reference, count, spacing, plane_name, sketch_name,
-                   create_sketches, group):
+                   create_sketches, group, show_planes=True, display_size=10.0):
     """Preserve zero offset for the first plane; Fusion owns the transaction."""
     root = design.rootComponent
     planes = root.constructionPlanes
     timeline = design.timeline if group and _has_history(design) else None
     start_index = timeline.markerPosition if timeline else None
+    created_planes = []
 
     for index in range(count):
         plane_input = planes.createInput()
@@ -133,6 +153,7 @@ def _create_planes(design, reference, count, spacing, plane_name, sketch_name,
         if not plane:
             raise RuntimeError(tr('plane_failed', number=index + 1))
         plane.name = f'{plane_name} {index + 1}'
+        created_planes.append(plane)
         if create_sketches:
             sketch = root.sketches.add(plane)
             sketch.name = f'{sketch_name} {index + 1}'
@@ -146,6 +167,13 @@ def _create_planes(design, reference, count, spacing, plane_name, sketch_name,
                 raise RuntimeError(tr('group_failed'))
             timeline_group.name = tr('group_name', name=plane_name)
             grouped = True
+    # Sketch creation can hide its support plane. Apply the requested state
+    # after all sketches and timeline operations, including the parent folder.
+    if show_planes:
+        root.isConstructionFolderLightBulbOn = True
+    for plane in created_planes:
+        _size_plane(plane, display_size)
+        plane.isLightBulbOn = show_planes
     return grouped
 
 
@@ -177,6 +205,11 @@ class CommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
                 'planeOffset', tr('offset'), design.unitsManager.defaultLengthUnits,
                 adsk.core.ValueInput.createByReal(1.0))
             inputs.addBoolValueInput('createSketches', tr('sketches'), True, '', False)
+            inputs.addBoolValueInput('showPlanes', tr('show_planes'), True, '', True)
+            display_size = inputs.addValueInput(
+                'planeDisplaySize', tr('display_size'), design.unitsManager.defaultLengthUnits,
+                adsk.core.ValueInput.createByReal(10.0))
+            display_size.tooltip = tr('display_size_hint')
             inputs.addStringValueInput('planeName', tr('plane_name'), DEFAULT_NAME)
             sketch_name = inputs.addStringValueInput(
                 'sketchName', tr('sketch_name'), DEFAULT_NAME)
@@ -242,7 +275,9 @@ class CommandExecuteHandler(adsk.core.CommandEventHandler):
                 count, inputs.itemById('planeOffset').value,
                 inputs.itemById('planeName').value.strip() or DEFAULT_NAME,
                 inputs.itemById('sketchName').value.strip() or DEFAULT_NAME,
-                create_sketches, inputs.itemById('groupInHistory').value)
+                create_sketches, inputs.itemById('groupInHistory').value,
+                inputs.itemById('showPlanes').value,
+                inputs.itemById('planeDisplaySize').value)
             app.userInterface.messageBox(
                 tr('success', count=count)
                 + (tr('sketch_success') if create_sketches else '')

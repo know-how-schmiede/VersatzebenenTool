@@ -42,6 +42,8 @@ class CommandTests(unittest.TestCase):
         self.app = NS(userInterface=MagicMock(), activeProduct=None)
         adsk.core.Application = NS(get=lambda: self.app)
         adsk.core.Plane = Plane
+        adsk.core.Point2D = NS(create=lambda x, y: NS(x=x, y=y))
+        adsk.core.BoundingBox2D = NS(create=lambda low, high: NS(minPoint=low, maxPoint=high))
         adsk.core.ValueInput = NS(createByReal=lambda value: value)
         adsk.fusion.ConstructionPlane = ConstructionPlane
         adsk.fusion.BRepFace = BRepFace
@@ -63,13 +65,19 @@ class CommandTests(unittest.TestCase):
     def design(self, history=True):
         timeline = NS(markerPosition=3, count=20, timelineGroups=MagicMock())
         planes, sketches = MagicMock(), MagicMock()
+        self.created_planes = []
 
         def add_plane(_):
             timeline.markerPosition += 1
-            return NS()
+            plane = NS(displayBounds=NS(minPoint=NS(x=2, y=3), maxPoint=NS(x=4, y=5)),
+                       isLightBulbOn=True)
+            self.created_planes.append(plane)
+            return plane
 
         def add_sketch(_):
             timeline.markerPosition += 1
+            for plane in self.created_planes:
+                plane.isLightBulbOn = False
             return NS()
 
         planes.add.side_effect = add_plane
@@ -135,6 +143,7 @@ class CommandTests(unittest.TestCase):
             'planeSelection': NS(selectionCount=1, selection=lambda _: NS(entity=ConstructionPlane())),
             'numPlanes': NS(value=5),
             'planeOffset': NS(value=1, isValidExpression=True),
+            'planeDisplaySize': NS(value=10, isValidExpression=True),
         }
         return NS(itemById=values.get), values
 
@@ -168,6 +177,7 @@ class CommandTests(unittest.TestCase):
             'planeName': NS(value='  '),
             'sketchName': NS(value=' Drawing '),
             'groupInHistory': NS(value=True),
+            'showPlanes': NS(value=True),
         })
         return NS(firingEvent=NS(sender=NS(commandInputs=inputs)), executeFailed=False)
 
@@ -222,6 +232,41 @@ class CommandTests(unittest.TestCase):
         destroy = command.destroy.add.call_args.args[0]
         destroy.notify(NS())
         self.assertFalse(self.command.command_handlers)
+
+    def test_planes_visible_after_all_sketches_and_folder_enabled(self):
+        design, _ = self.design()
+        design.rootComponent.isConstructionFolderLightBulbOn = False
+        self.command._create_planes(design, ConstructionPlane(), 3, 1,
+                                    'Plane', 'Sketch', True, True, True, 10)
+        self.assertTrue(design.rootComponent.isConstructionFolderLightBulbOn)
+        self.assertTrue(all(p.isLightBulbOn for p in self.created_planes))
+
+    def test_hidden_option_does_not_change_folder_or_existing_planes(self):
+        design, _ = self.design()
+        design.rootComponent.isConstructionFolderLightBulbOn = True
+        self.command._create_planes(design, ConstructionPlane(), 2, 1,
+                                    'Plane', 'Sketch', False, False, False, 10)
+        self.assertTrue(design.rootComponent.isConstructionFolderLightBulbOn)
+        self.assertTrue(all(not p.isLightBulbOn for p in self.created_planes))
+
+    def test_display_bounds_keep_center_and_grow_for_long_names(self):
+        plane = NS(name='A' * 40, displayBounds=NS(
+            minPoint=NS(x=2, y=3), maxPoint=NS(x=4, y=5)))
+        self.command._size_plane(plane, 10)
+        low, high = plane.displayBounds.minPoint, plane.displayBounds.maxPoint
+        self.assertEqual((high.x - low.x, high.y - low.y), (20, 10))
+        self.assertEqual(((low.x + high.x) / 2, (low.y + high.y) / 2), (3, 4))
+        self.command._size_plane(plane, 1)
+        self.assertEqual(plane.displayBounds.maxPoint.x - plane.displayBounds.minPoint.x, 20)
+
+    def test_display_size_must_be_positive_finite_and_valid(self):
+        inputs, values = self.inputs()
+        for size in (0, -1, float('inf'), float('nan')):
+            values['planeDisplaySize'].value = size
+            self.assertFalse(self.command._valid_inputs(inputs))
+        values['planeDisplaySize'].value = 10
+        values['planeDisplaySize'].isValidExpression = False
+        self.assertFalse(self.command._valid_inputs(inputs))
 
     def test_cleanup_removes_control_before_definition_and_releases_handlers(self):
         ui = self.app.userInterface

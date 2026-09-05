@@ -6,7 +6,7 @@
 	"description":	{
 		"":	"Versatzebenen, Skizzen erstellen und gruppieren"
 	},
-	"version":	"1.2.2",
+	"version":	"1.3.0",
 	"runOnStartup":	false,
 	"supportedOS":	"windows|mac",
 	"editEnabled":	true,

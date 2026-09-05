@@ -1,10 +1,19 @@
 # Version history / Versionshistorie
 
 <!-- version:start -->
-**Current version / Aktuelle Version: 1.2.2**
+**Current version / Aktuelle Version: 1.3.0**
 <!-- version:end -->
 
 [English README](../README.md) · [Deutsche README](../README.de.md)
+
+## 1.3.0
+
+- Added a default-enabled option to show created planes, applied after all sketches and timeline grouping so support planes remain visible. Disabling it hides only the newly created planes.
+- Enable the root Construction folder when showing planes.
+- Added a positive, configurable minimum display size (100 mm by default), with extra width for longer names and preservation of existing larger bounds and their center.
+- Localized both new controls and the display-size guidance in all five languages.
+- Documented Fusion's separate Construction Plane Names display setting and zoom-dependent label visibility.
+- Added regression tests for visibility after sketch creation, hidden planes, display sizing and input validation.
 
 ## 1.2.2
 

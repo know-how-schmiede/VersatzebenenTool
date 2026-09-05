@@ -3,7 +3,7 @@
 # VersatzebenenTool
 
 <!-- version:start -->
-**Current version: 1.2.2**
+**Current version: 1.3.0**
 <!-- version:end -->
 
 [Deutsche README](README.de.md) · [Version history](doku/version.md)
@@ -15,6 +15,8 @@ A Python add-in for Autodesk Fusion to create offset construction planes, option
 - Create 1–50 planes in the root component from a construction plane or planar face.
 - Set uniform spacing for the series. The first plane has zero offset: five planes at 1 cm spacing are placed at 0, 1, 2, 3 and 4 cm.
 - Optionally create an empty sketch on every plane.
+- Keep created planes visible even when sketches are created (enabled by default), or hide the new planes by disabling **Show created planes**.
+- Set a minimum plane display size (default: 100 mm). Longer names receive extra width; existing larger display bounds are preserved.
 - Set plane and sketch base names with automatic numbering; the default is `vref`.
 - Optionally group the created objects in the timeline (requires design history).
 - Display the current version in the command title.
@@ -42,6 +44,8 @@ Individual distances per plane are not implemented. The dialog uses document len
 4. For updates, stop the add-in, replace its files and restart it.
 
 ## Usage and language
+
+Plane visibility is applied after sketch creation. Showing the planes also enables the root component's Construction folder, which may reveal other planes whose visibility was already enabled. The display size changes only the visual rectangle, not the plane geometry or sketch scale. For canvas labels, enable **Display Settings → Object Visibility → Construction Plane Names** in Fusion; label readability also depends on zoom and viewing angle. See [Autodesk's plane-name instructions](https://help.autodesk.com/cloudhelp/ENU/Fusion-Model/files/SLD-CONSTRUCT-PLANE-NAMES.htm).
 
 The dialog shows the shared project banner and opens when the add-in starts with an active design. Reopen it from the **Create** panel in the Design workspace. Select a construction plane or planar face, set count and spacing, choose names and optional sketches/grouping, then confirm.
 

@@ -3,7 +3,7 @@
 # VersatzebenenTool
 
 <!-- version:start -->
-**Aktuelle Version: 1.2.2**
+**Aktuelle Version: 1.3.0**
 <!-- version:end -->
 
 [English README](README.md) · [Versionshistorie](doku/version.md)
@@ -15,6 +15,8 @@ Ein Python-Add-in für Autodesk Fusion zum Erstellen von Versatzebenen, optional
 - 1–50 Ebenen ausgehend von einer Konstruktionsebene oder planaren Fläche in der Stammkomponente erstellen.
 - Gleichmäßigen Abstand für die Serie festlegen. Die erste Ebene hat Versatz 0: Fünf Ebenen mit 1 cm Abstand liegen bei 0, 1, 2, 3 und 4 cm.
 - Optional eine leere Skizze auf jeder Ebene erstellen.
+- Erstellte Ebenen auch bei angelegten Skizzen sichtbar lassen (standardmäßig aktiviert) oder über **Erstellte Ebenen anzeigen** ausblenden.
+- Mindestgröße der Ebenendarstellung einstellen (Standard: 100 mm). Längere Namen erhalten mehr Breite; bereits größere Darstellungen bleiben erhalten.
 - Basisnamen für Ebenen und Skizzen mit automatischer Nummerierung vergeben; der Standard ist `vref`.
 - Erstellte Objekte optional in der Timeline gruppieren (Konstruktionsverlauf erforderlich).
 - Aktuelle Version im Befehlstitel anzeigen.
@@ -42,6 +44,8 @@ Individuelle Abstände je Ebene sind nicht implementiert. Der Dialog verwendet d
 4. Für Updates das Add-in stoppen, seine Dateien ersetzen und erneut starten.
 
 ## Bedienung und Sprache
+
+Die Ebenensichtbarkeit wird nach der Skizzenerstellung gesetzt. Beim Anzeigen wird auch der Konstruktionsordner der Stammkomponente eingeschaltet; dadurch können weitere Ebenen sichtbar werden, deren eigene Sichtbarkeit bereits aktiviert war. Die Darstellungsgröße verändert nur das sichtbare Rechteck, nicht die Ebenengeometrie oder den Skizzenmaßstab. Für Beschriftungen in Fusion **Anzeigeeinstellungen → Objektsichtbarkeit → Konstruktionsebenennamen** aktivieren. Die Lesbarkeit hängt zusätzlich von Zoom und Blickwinkel ab. Siehe [Autodesks Anleitung zur Namensanzeige](https://help.autodesk.com/cloudhelp/ENU/Fusion-Model/files/SLD-CONSTRUCT-PLANE-NAMES.htm).
 
 Beim Start des Add-ins mit aktiver Konstruktion öffnet sich der Dialog mit dem gemeinsamen Projektbanner. Er lässt sich anschließend im Arbeitsbereich Konstruktion über das Panel **Erstellen** erneut öffnen. Eine Konstruktionsebene oder planare Fläche auswählen, Anzahl und Abstand einstellen, Namen und bei Bedarf Skizzen/Gruppierung festlegen und bestätigen.
 
